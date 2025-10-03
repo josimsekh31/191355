@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Macrodroid Automation</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Font Awesome CDN -->
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif; /* Slightly modern font */
+      background-color: #202b38; /* Even darker background */
+      color: #e0e6eb; /* Lighter, more readable text */
+      margin: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 320px;
+    }
+    .centerheading {
+      color: #5dade2; /* Brighter blue heading */
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 2.2em;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+    }
+    .box {
+      background-color: #2c3e50; /* Darker box */
+      border-radius: 12px; /* More rounded corners */
+      padding: 25px;
+      margin-bottom: 25px;
+      width: 100%;
+      max-width: 500px; /* Slightly wider max-width */
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    }
+    .title {
+      color: #f39c12; /* Vibrant orange title */
+      font-weight: bold;
+      font-size: 1.3em;
+      margin-bottom: 20px;
+      display: block;
+      border-bottom: 2px solid #34495e; /* Thicker border */
+      padding-bottom: 12px;
+    }
+    label {
+      display: block;
+      margin-bottom: 10px;
+      color: #bdc3c7;
+      font-size: 0.95em;
+    }
+    textarea { /* Styling for the new textarea */
+      width: calc(100% - 20px);
+      padding: 12px;
+      margin-bottom: 15px;
+      border: 1px solid #7f8c8d;
+      border-radius: 6px;
+      background-color: #253340; /* Darker input background */
+      color: #e0e6eb;
+      box-sizing: border-box;
+      resize: vertical; /* Allow vertical resizing */
+      min-height: 80px; /* Minimum height for textarea */
+      font-size: 1em;
+    }
+    .radio-group {
+      margin-bottom: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px; /* Increased gap */
+    }
+    .radio-group label {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0;
+      color: #e0e6eb;
+      cursor: pointer;
+      font-size: 1em;
+    }
+    .radio-group input[type="radio"] {
+      margin-right: 8px; /* Increased margin */
+      accent-color: #5dade2; /* Blue accent for radio buttons */
+      transform: scale(1.2); /* Slightly larger radio buttons */
+    }
+    .send-button-container {
+      text-align: right;
+      margin-top: 15px;
+    }
+    .button { /* General button style */
+      background-color: #5dade2; /* Blue button */
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1.05em;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+    .button:hover {
+      background-color: #4a98d3; /* Darker blue on hover */
+      transform: translateY(-2px);
+    }
+    .button:active {
+      transform: translateY(0);
+    }
+
+    /* FAB Button Styling */
+    .fab-buttons-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px; /* Spacing between FAB buttons */
+      width: 100%;
+      max-width: 500px; /* Match box width */
+      margin-top: 30px;
+    }
+    .fab-button {
+      width: 80px; /* Fixed size for smaller FAB style */
+      height: 80px;
+      border-radius: 50%; /* Circular shape */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 0.85em; /* Smaller text */
+      font-weight: bold;
+      text-align: center;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      position: relative;
+      overflow: hidden;
+      background-color: #3498db; /* Default fallback */
+      border: none; /* Remove default button border */
+      text-decoration: none; /* For potential links */
+    }
+    .fab-button:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5);
+    }
+    .fab-button:active {
+      transform: translateY(0) scale(1);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+    }
+    .fab-button .icon {
+      font-size: 2em; /* Icon size */
+      margin-bottom: 5px;
+      line-height: 1; /* Ensure icon doesn't add extra height */
+    }
+    .fab-button .text {
+        font-size: 0.7em; /* Adjust text size within FAB */
+        line-height: 1.2;
+    }
+
+    /* Individual FAB button colors */
+    .fab-recent { background-color: #e74c3c; } /* Red */
+    .fab-back { background-color: #2ecc71; } /* Green */
+    .fab-home { background-color: #9b59b6; } /* Purple */
+    .fab-hotspot-on { background-color: #f1c40f; } /* Yellow */
+    .fab-hotspot-off { background-color: #e67e22; } /* Orange */
+    .fab-alarm { background-color: #3498db; } /* Blue */
+    .fab-stop-alarm { background-color: #1abc9c; } /* Turquoise */
+    .fab-float-off { background-color: #95a5a6; } /* Grey */
+
+    /* Responsive adjustments */
+    @media (max-width: 520px) {
+      .box {
+        padding: 20px;
+      }
+      .centerheading {
+        font-size: 1.8em;
+      }
+      .fab-button {
+        width: 70px;
+        height: 70px;
+        font-size: 0.75em;
+        gap: 8px; /* Reduce gap on smaller screens */
+      }
+      .fab-button .icon {
+        font-size: 1.8em;
+      }
+      .fab-buttons-container {
+        gap: 10px;
+      }
+    }
+    @media (max-width: 400px) {
+        .fab-button {
+            width: 65px;
+            height: 65px;
+            font-size: 0.65em;
+        }
+        .fab-button .icon {
+            font-size: 1.6em;
+        }
+    }
+  </style>
+</head>
+<body>
+  <h1 class="centerheading">Macrodroid Automation</h1>
+
+  <div class="box">
+    <span class="title">Message Actions</span><br>
+    
+    <div class="radio-group">
+      <label><input type="radio" name="message_type" value="dialog" checked> Popup/Dialog</label>
+      <label><input type="radio" name="message_type" value="notification"> Notification</label>
+      <label><input type="radio" name="message_type" value="floating"> Floating Text</label>
+      <label><input type="radio" name="message_type" value="speak"> Speak</label>
+    </div>
+
+    <label for="messageInput">Enter Message!</label>
+    <textarea id="messageInput" rows="5" placeholder="Your message or description here..."></textarea>
+    
+    <div class="send-button-container">
+      <button class="button" onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+
+  <div class="fab-buttons-container">
+    <button class="fab-button fab-recent" onclick="senddata('?text=RECENT')">
+        <i class="fas fa-redo-alt icon"></i><span class="text">Recent Apps</span>
+    </button>
+    <button class="fab-button fab-back" onclick="senddata('?text=BACK')">
+        <i class="fas fa-arrow-left icon"></i><span class="text">Back Button</span>
+    </button>
+    <button class="fab-button fab-home" onclick="senddata('?text=HOME')">
+        <i class="fas fa-home icon"></i><span class="text">Home Button</span>
+    </button>
+    <button class="fab-button fab-hotspot-on" onclick="senddata('?Tempvar=htspton')">
+        <i class="fas fa-wifi icon"></i><span class="text">Hotspot On</span>
+    </button>
+    <button class="fab-button fab-hotspot-off" onclick="senddata('?Tempvar=htsptoff')">
+        <i class="fas fa-wifi-slash icon"></i><span class="text">Hotspot Off</span>
+    </button>
+    <button class="fab-button fab-alarm" onclick="senddata('?Tempvar=alarm')">
+        <i class="fas fa-bell icon"></i><span class="text">Ring Alarm</span>
+    </button>
+    <button class="fab-button fab-stop-alarm" onclick="senddata('?Tempvar=cancel')">
+        <i class="fas fa-bell-slash icon"></i><span class="text">Stop Alarm</span>
+    </button>
+    <button class="fab-button fab-float-off" onclick="senddata('?Tempvar=floatoff')">
+        <i class="fas fa-times-circle icon"></i><span class="text">Disable Float</span>
+    </button>
+  </div>
+
+  <iframe src="" width="0" height="0" style="display:none"></iframe>
+</body>
+<script>
+    // Hardcoded Webhook URL
+    const WEBHOOK_URL = 'https://trigger.macrodroid.com/8601f7fb-21a0-4cc1-a5ae-5652af517c2c/josim-device-controller';
+
+    // Helper function to get value and encode it
+    function val(id) {
+        const element = document.getElementById(id);
+        return element ? encodeURIComponent(element.value) : '';
+    }
+
+    // Function to send data
+    function senddata(params) {
+        const fullUrl = WEBHOOK_URL + params;
+        const iframe = document.querySelector('iframe');
+        if (iframe) {
+            iframe.src = fullUrl;
+            console.log("Sending data to: " + fullUrl); // For debugging
+        } else {
+            console.error("Iframe not found!");
+        }
+    }
+
+    // Function to handle sending the main message based on radio selection
+    function sendMessage() {
+        const message = val('messageInput');
+        const selectedType = document.querySelector('input[name="message_type"]:checked').value;
+        let params = '';
+
+        if (!message) {
+            alert("Please enter a message!");
+            return;
+        }
+
+        switch (selectedType) {
+            case 'dialog':
+                // For a proper Macrodroid dialog with title and message
+                // Assuming 'Tempvar=message' triggers a dialog on your Macrodroid side.
+                // You might need to adjust 'ttl' if Macrodroid expects a specific title for a dialog.
+                params = '?ttl=Macrodroid+Dialog&msg=' + message + '&Tempvar=message'; 
+                break;
+            case 'notification':
+                params = '?ttl=New+Notification&msg=' + message + '&Tempvar=notimessage';
+                break;
+            case 'floating':
+                params = '?ftext=' + message + '&Tempvar=floaton';
+                break;
+            case 'speak':
+                params = '?speak=' + message + '&Tempvar=speak';
+                break;
+            default:
+                console.error("Unknown message type selected.");
+                return;
+        }
+        senddata(params);
+        document.getElementById('messageInput').value = ''; // Clear input after sending
+    }
+</script>
+</html>
