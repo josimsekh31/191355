@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Macrodroid Automation</title>
+  <title>💝Rivana ♥️ Parvin💝</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Font Awesome CDN -->
   <style>
     :root {
@@ -187,6 +187,7 @@
     .fab-stop-alarm { background-color: #1abc9c; } /* Turquoise */
     .fab-float-off { background-color: #95a5a6; } /* Grey */
     .fab-screen-off { background-color: #6c5ce7; } /* Violet for Screen Off */
+    .fab-fullscreen { background-color: #00b894; } /* Teal for Fullscreen */
 
 
     /* Password Overlay Styles */
@@ -400,7 +401,7 @@
 
   <!-- Main Content (initially hidden) -->
   <div id="main-content">
-    <h1 class="centerheading">♥️ Rivana 💝 Parvin ♥️</h1>
+    <h1 class="centerheading">Macrodroid Automation</h1>
 
     <div class="box">
       <span class="title">Message Actions</span><br>
@@ -449,6 +450,9 @@
       </button>
       <button class="fab-button fab-screen-off" onclick="senddata('?Tempvar=lock', 'Screen Off command sent!')">
           <i class="fas fa-lock icon"></i><span class="text">Screen Off</span>
+      </button>
+      <button class="fab-button fab-fullscreen" onclick="toggleFullScreen()">
+          <i class="fas fa-expand icon"></i><span class="text">Full Screen</span>
       </button>
     </div>
   </div> <!-- End of #main-content -->
@@ -580,5 +584,33 @@
             showToast("Incorrect password!", false); // Show error toast on failed login
         }
     }
+
+    // Full Screen Functionality
+    function toggleFullScreen() {
+        if (!document.fullscreenElement) {
+            // If not in fullscreen, request fullscreen
+            document.documentElement.requestFullscreen().catch(err => {
+                showToast(`Error attempting to enable full-screen mode: ${err.message} (You must initiate it with a user gesture, e.g., a click)`, false);
+                console.error(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+            });
+        } else {
+            // If in fullscreen, exit fullscreen
+            if (document.exitFullscreen) {
+                document.exitFullscreen().catch(err => {
+                    showToast(`Error attempting to exit full-screen mode: ${err.message}`, false);
+                    console.error(`Error attempting to exit full-screen mode: ${err.message} (${err.name})`);
+                });
+            }
+        }
+    }
+
+    // Optional: Show a toast when entering/exiting fullscreen
+    document.addEventListener('fullscreenchange', () => {
+        if (document.fullscreenElement) {
+            showToast("Entered Full Screen mode!", true);
+        } else {
+            showToast("Exited Full Screen mode!", true);
+        }
+    });
 </script>
 </html>
